@@ -1,14 +1,15 @@
-import { FastifyReply, FastifyRequest } from "fastify";
+import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { findUserByEmail } from "../user/user.service.js";
 import { LoginInput } from "./auth.schema.js";
 import { verifyPassword } from "../../utils/hash.js";
 
 export const loginHandler =  async (
   request: FastifyRequest<{
-      Body: LoginInput
+    Body: LoginInput
   }>, 
-    reply: FastifyReply
-) => {
+    reply: FastifyReply,
+    server: FastifyInstance
+  ) => {
   const body = request.body;
 
   // Try to find a user by email 
@@ -39,7 +40,7 @@ export const loginHandler =  async (
     email: user.email,
     first_name: user.first_name,
   }
-  const token = request.jwt.sign(payload);
+  const token = server.jwt.sign(payload);
 
   // Set cookie to reply
   reply.setCookie('access_token', token, {
@@ -49,7 +50,7 @@ export const loginHandler =  async (
     ...(!body.remember ? { maxAge: 1000 * 60 * 60 * 24 * 7, /*for a week */ } : null )
   })
 
-  return { accessToken: token }
+  return "Login succeed"
 }
 
 export const  logoutHandler =  async (_: FastifyRequest, reply: FastifyReply) => {

@@ -1,40 +1,42 @@
+
 ## DB & API
 
-### Instalacion
-Instalar docker y ejecutar
+### Build with
 
-Usar node 20
+ <img src="https://skillicons.dev/icons?i=docker,ts,postgresql,prisma" />
+ 
+### Install
 
-Instalar dependencias
+Use node 20 (specified in the .nvmrc file)
+```
+nvm use
+```
+Dependencies
 ```
 yarn install
 ```
-
-Levantar el proyecto
+Run project
 ```
 yarn dev
 ```
-
-Aplicar migraciones
+Apply first migration
 ```
 yarn migrate init
 ```
-
-Crear admin
+Create admin user
 ```
 yarn seed:createAdmin -- <email> <password>
 ```
 
-### Desarrollo
+### Develop
 
-Levantar el proyecto
+Run project el proyecto
 ```
+docker-compose up
 yarn dev
 ```
-
-Al actualizar modelos: generar/aplicar migraciones y regenenerar prisma-client
+When updating models: generate/apply migrations and regenerate prisma-client
 ```
-yarn run migrate <nombre de la migracion>
-
+yarn run migrate <migration name>
 yarn run generate
 ```

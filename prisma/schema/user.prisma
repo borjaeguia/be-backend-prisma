@@ -1,3 +1,9 @@
+enum Role {
+  USER
+  ADMIN
+  ARTIST
+}
+
 model User {
   id Int @id @default(autoincrement())
   first_name String?
@@ -7,4 +13,7 @@ model User {
   salt String
   phone String?
   dni String?
-}
+  role  Role @default(USER)
+  artist Artist?
+  admin Admin?
+  }

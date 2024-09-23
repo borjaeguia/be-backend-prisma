@@ -1,6 +1,6 @@
-import { prismaClient } from "../../prismaClient.js";
 import { hashPassword } from "@utils/hash.js";
 import { CreateUserInput } from "./user.schema.js";
+import { prismaClient } from "src/config/prisma.js";
 
 export const createUser = async (input: CreateUserInput) => {
     
@@ -8,11 +8,22 @@ export const createUser = async (input: CreateUserInput) => {
   
   const { hash, salt } = hashPassword(password);
 
-  const user = await prismaClient.user.create({
-      data: {...rest, salt, password: hash, }
+  const user = await prismaClient.user.findFirst({
+    where: { email: input.email },
   });
+  
+  if (user ) {
+    return 'User already exists'
+  }
 
-  return user;
+  try {
+    const user = await prismaClient.user.create({
+        data: {...rest, salt, password: hash, }
+    });
+    return user;
+  } catch {
+    return 'error';
+  }
 }
 
 export const getUsers = async () => {

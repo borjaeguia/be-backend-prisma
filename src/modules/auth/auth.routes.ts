@@ -1,23 +1,26 @@
-import { FastifyInstance } from "fastify";
+import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
 import { loginHandler, logoutHandler } from "./auth.controller.js";
-import { $ref } from "./auth.schema.js";
+import { $ref, LoginInput } from "./auth.schema.js";
 
 
 export const authRoutes = async (server: FastifyInstance) => {
   
   server.post('/login',  {
     schema: {
-      body: $ref("loginSchema"),
+      body: $ref("loginInputSchema"),
       response: {
         201: $ref("loginResponseSchema"),
       }
     }
-  }, loginHandler);
+  }, (request: FastifyRequest<{
+    Body: LoginInput
+}>, 
+  reply: FastifyReply) =>  loginHandler(request, reply, server));
 
   server.delete(
     '/logout',
     {
-      preHandler: [server.authenticate],
+      preValidation: [server.authenticate],
     },
     logoutHandler
   )

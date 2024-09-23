@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client'
+import { $Enums, PrismaClient } from '@prisma/client'
 import { hashPassword } from '../../src/utils/hash.js';
 
 const prismaClient = new PrismaClient()
@@ -7,9 +7,6 @@ async function main() {
   const args = process.argv.slice(2);
   const email = args[0];
   const password = args[1];
-
-  console.log("email:", email)
-  console.log("password:", password)
 
   if (!email || !password) {
     console.log('Email and password are required');
@@ -20,7 +17,7 @@ async function main() {
     const { hash, salt } = hashPassword(password);
 
     await prismaClient.user.create({
-      data: { email, password: hash, salt }
+      data: { email, password: hash, salt, role: $Enums.Role.ADMIN }
     });
   } catch (error) {
     console.error(error);
