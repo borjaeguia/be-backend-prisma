@@ -1,0 +1,1 @@
+import{getUsersHandler,registerUserHandler}from"./user.controller.js";import{$ref}from"./user.schema.js";export const userRoutes=async server=>{server.get("/",{preHandler:[server.authenticate]},getUsersHandler);server.post("/",{schema:{body:$ref("createUserSchema"),response:{201:$ref("createUserResponseSchema")}}},registerUserHandler)};

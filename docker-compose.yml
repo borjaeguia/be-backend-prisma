@@ -1,0 +1,38 @@
+version: '3.8'
+services:
+
+  postgres:
+    container_name: 'be-prisma-postgres'
+    image: postgres:13
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    volumes:
+      - be-prisma-postgres:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+#  api:
+#   container_name: 'be-prisma-api'
+#   image: node:latest
+#   volumes:
+#     - .:/app
+#   ports:
+#     - "4000:4000"
+#     - "5555:5555"
+#   depends_on:
+#     - postgres
+#   working_dir: /app
+#   command: 'yarn run dev'
+
+  adminer:
+    container_name: 'be-prisma-adminer'
+    image: adminer
+    depends_on:
+      - postgres
+    ports:
+      - 8080:8080
+
+volumes:
+  be-prisma-postgres:
